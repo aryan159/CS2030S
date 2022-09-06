@@ -1,4 +1,5 @@
 class CustomerQueuedEvent extends ShopEvent {
+
   public CustomerQueuedEvent(double time, Customer customer, Shop shop) {
     super(time, customer, shop);
   }

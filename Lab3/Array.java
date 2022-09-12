@@ -8,6 +8,10 @@ class Array<T extends Comparable<T>> {
   private T[] array;
 
   Array(int size) {
+    // We can suppress "unchecked" since the only way to modify T[]
+    // is through the set() method (which type checks for T) and the
+    // only way to access it is through get() and min() which can only 
+    // return objects of Type T.
     @SuppressWarnings({"rawtypes", "unchecked"})
     T[] temp = (T[]) new Comparable[size]; 
     array = temp;

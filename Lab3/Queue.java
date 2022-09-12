@@ -30,6 +30,9 @@ class Queue<T> {
   // Suppress Warning
   public Queue(int size) {
     this.maxSize = size;
+    // We can suppress "unchecked" and be sure of Type Safety because
+    // the only way to modify T[] is through enq() which type checks for T
+    // and the only way to access T[] is through deq() which only returns T
     @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[size];
     this.items = temp;

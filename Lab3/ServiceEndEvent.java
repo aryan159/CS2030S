@@ -22,8 +22,8 @@ class ServiceEndEvent extends ShopEvent {
       if (nextCustomerFromShopQ != null) {
         return new Event[] {
           departureEvent,
+          serviceBeginEvent,
           new CustomerCounterQueuedEvent(this.getTime(), nextCustomerFromShopQ, this.getShop(), this.counter),
-          serviceBeginEvent
         };
       } else {
         return new Event[] {

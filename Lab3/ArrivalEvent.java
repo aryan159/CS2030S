@@ -19,7 +19,8 @@ class ArrivalEvent extends ShopEvent {
     Counter counterToQueue = this.getShop().nextAvailCounterQueue();
     if (counterToQueue != null) {
       return new Event[] {
-        new CustomerCounterQueuedEvent(this.getTime(), this.getCustomer(), this.getShop(), counterToQueue)
+        new CustomerCounterQueuedEvent(this.getTime(), this.getCustomer(),
+            this.getShop(), counterToQueue)
       };
     } else if (!this.getShop().isQueueFull()) {
       return new Event[] {

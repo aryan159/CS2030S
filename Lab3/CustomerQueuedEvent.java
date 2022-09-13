@@ -6,7 +6,7 @@ class CustomerQueuedEvent extends ShopEvent {
     
   @Override
   public String toString() {
-    return super.toString() + "joined shop queue " + this.getShop().getQueue();
+    return super.toString() + "joined " + this.getShop();
   }
 
   @Override

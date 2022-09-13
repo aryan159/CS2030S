@@ -38,6 +38,7 @@ class Counter implements Comparable<Counter> {
       return -1;
     }
   }
+
   public String toString() {
     return "S" + this.id + " " + this.queue.toString();  
   }

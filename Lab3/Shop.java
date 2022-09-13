@@ -27,6 +27,7 @@ class Shop {
     Counter counter = this.counters.min();
     return counter.isQueueFull() ? null : counter;
   }
+
   public boolean enqueue(Customer customer) {
     return queue.enq(customer);
   }
@@ -37,5 +38,10 @@ class Shop {
 
   public boolean isQueueFull() {
     return queue.isFull();
+  }
+
+  @Override
+  public String toString() {
+    return "shop queue " + this.queue.toString();
   }
 }

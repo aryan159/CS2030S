@@ -2,10 +2,17 @@
  * The Action interface that can be called
  * on an object of type T to act.
  *
- * Contains a single abstract method call.
+ * <p> 
+ * Contains a single abstract method call. 
+ * </p>
  *
+ * <p>
  * CS2030S Lab 4
  * AY22/23 Semester 1
+ * </p>
  *
- * @author Put Your Name (Lab Group)
- */
+ * @author Aryan Jain */
+interface Action<T> {
+  void call(T t);
+
+}

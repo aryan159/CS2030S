@@ -3,10 +3,17 @@
  * transform when given something that is
  * Immutator.
  *
+ * <p>
  * Contains a single abstract method transform.
+ * </p>
  *
+ * <p>
  * CS2030S Lab 4
  * AY22/23 Semester 1
+ * </p>
  *
- * @author Put Your Name (Lab Group)
+ * @author Aryan Jain (10B)
  */
+interface Immutatorable<T> {
+  <R> Immutatorable<R> transform(Immutator<? extends R, ? super T> immutator);
+}

@@ -2,10 +2,16 @@
  * The Actionable interface that can
  * act when given an action.
  *
+ * <p>
  * Contains a single abstract method act.
+ * </p>
  *
+ * <p>
  * CS2030S Lab 4
  * AY22/23 Semester 1
+ * </p>
  *
- * @author Put Your Name (Lab Group)
- */
+ * @author  Aryan Jain (10B) */
+interface Actionable<T> {
+  void act(Action<? super T> action);
+}

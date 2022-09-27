@@ -5,10 +5,10 @@
  * we may return something that contains nothing
  * where the nothing is a null.
  *
- * @author XXX
+ * @author Aryan Jain
  * @version CS2030S AY22/23 Semester 1
  */
-class Probably<T> {
+class Probably<T> implements Actionable<T>, Immutatorable<T>, Applicable<T> {
   private final T value;
 
   private static final Probably<?> NONE = new Probably<>(null);
@@ -18,7 +18,7 @@ class Probably<T> {
    * This is called a factory method.  We can only
    * create this using the two public static method.
    *
-   * @return The shared NOTHING.
+   * @param value to be set
    */
   private Probably(T value) {
     this.value = value;
@@ -53,6 +53,36 @@ class Probably<T> {
     return (Probably<T>) new Probably<>(value);
   }
   
+  @Override
+  public void act(Action<? super T> action) {
+    if (this.value != null) {
+      action.call(this.value);    
+    }
+  }
+
+  @Override
+  public <R> Probably<R> apply(Probably<? extends Immutator<R, T>> probably) {
+    if (this.value != null && probably.value != null) {
+      return just(probably.value.invoke(this.value));
+    }
+    return none();
+  }
+
+  @Override
+  public <R> Probably<R> transform(Immutator<? extends R, ? super T> immutator) {
+    if (this.value != null) {
+      return just(immutator.invoke(this.value));
+    } else {
+      return none();
+    }
+  }
+
+  public Probably<T> check(Immutator<Boolean, ? super T> immutator) {
+    if (value != null && immutator.invoke(this.value)) {
+      return this;
+    }
+    return none();
+  }
   /**
    * Check for equality between something that
    * is probably a value but maybe nothing.
@@ -61,6 +91,7 @@ class Probably<T> {
    * @return True if the two values are equal,
    *         false otherwise.
    */
+  
   @Override
   public boolean equals(Object obj) {
     if (obj == this) {

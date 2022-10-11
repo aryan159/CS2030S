@@ -1,3 +1,5 @@
+package cs2030s.fp;
+
 /**
  * The Actionable interface that can
  * act when given an action.
@@ -12,6 +14,6 @@
  * </p>
  *
  * @author  Aryan Jain (10B) */
-interface Actionable<T> {
+public interface Actionable<T> {
   void act(Action<? super T> action);
 }

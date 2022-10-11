@@ -30,7 +30,7 @@ public abstract class Actually<T> implements Immutatorable<T> {
     }
 
     @Override
-    public Object unwrap() throws Exception{
+    public Object unwrap() throws Exception {
       throw this.exc;
     }
 
@@ -97,7 +97,7 @@ public abstract class Actually<T> implements Immutatorable<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <S> void finish(Action<? super S> action) {
-      action.call((S)this.res);
+      action.call((S) this.res);
     }
 
     @Override

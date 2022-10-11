@@ -19,6 +19,8 @@ public abstract class Actually<T> implements Immutatorable<T> {
 
   public abstract <S extends T> T unless(S s);
 
+  public abstract <R> Actually<R> next(Immutator<Actually<R>, T> immutator);
+
   /*
    * Nested Class Failure
    */
@@ -50,6 +52,11 @@ public abstract class Actually<T> implements Immutatorable<T> {
 
     @Override
     public <T> Actually<T> transform(Immutator<? extends T, ? super Object> immutator) {
+      return Actually.err(exc);
+    }
+
+    @Override
+    public <R> Actually<R> next(Immutator<Actually<R>, Object> immutator) {
       return Actually.err(exc);
     }
 
@@ -110,6 +117,16 @@ public abstract class Actually<T> implements Immutatorable<T> {
       try {
         return Actually.<S>ok(immutator.invoke(this.res));
       } catch (Exception e) {
+        return Actually.err(e);
+      }
+    }
+
+    @Override
+    public <R> Actually<R> next(Immutator<Actually<R>, T> immutator) {
+      try {
+        return immutator.invoke(Success.this.res);
+      }
+      catch (Exception e) {
         return Actually.err(e);
       }
     }

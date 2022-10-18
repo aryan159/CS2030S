@@ -1,15 +1,16 @@
 import cs2030s.fp.Constant;
+import cs2030s.fp.Memo;
 
 class Bool implements Cond {
-  private Boolean val;
+  private Memo<Boolean> val;
   
   public Bool(Constant<Boolean> val) {
-    this.val = val.init();
+    this.val = Memo.from(val);
   }
   
   @Override
   public boolean eval() {
-    return this.val;
+    return this.val.get();
   }
   
   @Override

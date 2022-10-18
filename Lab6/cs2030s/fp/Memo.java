@@ -51,7 +51,7 @@ public class Memo<T> extends Lazy<T> {
    * @return the initialized value
    */
   public T get() {
-    T val = this.value.unless(super.get());
+    T val = this.value.except(() -> super.get());
     this.value = Actually.ok(val);
     return val;
   }

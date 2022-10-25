@@ -1,5 +1,6 @@
-import cs2030s.fp.Immutator;
 import cs2030s.fp.Combiner;
+import cs2030s.fp.Immutator;
+import cs2030s.fp.Memo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +13,14 @@ import java.util.List;
  */
 class MemoList<T> {
   /** The wrapped java.util.List object */
-  private List<T> list;
+  private List<Memo<T>> list;
 
   /** 
    * A private constructor to initialize the list to the given one. 
    *
    * @param list The given java.util.List to wrap around.
    */
-  private MemoList(List<T> list) {
+  private MemoList(List<Memo<T>> list) {
     this.list = list;
   }
 
@@ -34,12 +35,42 @@ class MemoList<T> {
    * @param f The immutator function on the elements.
    * @return The created list.
    */
-  public static <T> MemoList<T> generate(int n, T seed, Immutator<T, T> f) {
+  public static <T> MemoList<T> generate(int n, T seed, Immutator<? extends T, ? super T> f) {
     MemoList<T> memoList = new MemoList<>(new ArrayList<>());
-    T curr = seed;
-    for (int i = 0; i < n; i++ ) {
-      MemoList.list.add(curr);
-      curr = f.invoke(curr);
+    Memo<T> curr = Memo.from(seed);
+    for (int i = 0; i < n; i++) {
+      memoList.list.add(curr);
+      curr = curr.transform(f);
+    }
+    return memoList;
+  }
+
+  /** 
+   * Generate the content of the list.  Given x, y and a lambda f, 
+   * generate the list of n elements as [x, y, f(x, y), f(y, f(x, y)), 
+   * ... ]
+   *
+   * @param <T> The type of the elements in the list.
+   * @param n The number of elements.
+   * @param fst The first element.
+   * @param snd The second element.
+   * @param f The combiner
+   * @return The created list.
+   */
+  public static <T> MemoList<T> generate(
+      int n,
+      T fst,
+      T snd,
+      Combiner<? extends T, ? super T, ? super T> f) {
+    MemoList<T> memoList = new MemoList<>(new ArrayList<>());
+    Memo<T> prevCurr = Memo.from(fst);
+    Memo<T> curr = Memo.from(snd);
+    memoList.list.add(prevCurr);
+    for (int i = 0; i < n - 1; i++) {
+      memoList.list.add(curr);
+      Memo<T> temp = curr;
+      curr = curr.combine(prevCurr, f); 
+      prevCurr = temp;
     }
     return memoList;
   }
@@ -51,7 +82,7 @@ class MemoList<T> {
    * @return The element at index i.
    */
   public T get(int i) {
-    return this.list.get(i);
+    return this.list.get(i).get();
   }
 
   /** 
@@ -61,7 +92,42 @@ class MemoList<T> {
    * @return The index of the element in the list.  -1 is element is not in the list.
    */
   public int indexOf(T v) {
-    return this.list.indexOf(v);
+    return this.list.indexOf(Memo.from(v));
+  }
+
+  /**
+   * Returns a new MemoList with values that have been mapped over 
+   * via the provided immutator.
+   *
+   * @param <R> The return type of the immutator
+   * @param f The immutator
+   * @return The new MemoList
+   */
+  public <R> MemoList<R> map(Immutator<? extends R, ? super T> f) {
+    MemoList<R> newList = new MemoList<>(new ArrayList<>());
+    for (Memo<T> elem : this.list) {
+      newList.list.add(elem.transform(f));
+    }
+    return newList;
+  }
+
+  /**
+   * Returns a new MemoList with values that have been mapped over 
+   * and flattened once via the provided immutator.
+   *
+   * @param <R> The return type of the immutator
+   * @param f The immutator
+   * @return The new MemoList
+   */
+  public <R> MemoList<R> flatMap(Immutator<? extends MemoList<R>, ? super T> f) {
+    MemoList<R> newList = new MemoList<>(new ArrayList<>());
+    for (Memo<T> elem : this.list) {
+      MemoList<R> curList = f.invoke(elem.get());
+      for (Memo<R> newElem : curList.list) {
+        newList.list.add(newElem);
+      }
+    }
+    return newList;
   }
 
   /** 

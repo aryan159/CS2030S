@@ -31,7 +31,6 @@ class Test4 {
         () -> InfiniteList.end().filter(x -> true).isEnd(), true);
     i.expectReturn("InfiniteList.end().filter(x -> false).isEnd()",
         () -> InfiniteList.end().filter(x -> false).isEnd(), true);
-
     i.expectReturn(
         "InfiniteList.end().limit(4).isEnd()",
         () -> InfiniteList.end().limit(4).isEnd(), true);
